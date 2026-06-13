@@ -1,0 +1,25 @@
+{
+  "name": "jimeng-skills",
+  "version": "1.0.0",
+  "description": "即梦 (Jimeng) AIGC skills — text-to-image, image-to-image, text-to-video, image-to-video via CLI and Prompt",
+  "author": {
+    "name": "AIGC Skills Community"
+  },
+  "homepage": "https://github.com/full-aigc-skills/jimeng-skills",
+  "repository": "https://github.com/full-aigc-skills/jimeng-skills",
+  "source": "./",
+  "skills": [
+    "./skills/jimeng-cli-image2image",
+    "./skills/jimeng-cli-image2video",
+    "./skills/jimeng-cli-text2image",
+    "./skills/jimeng-cli-text2video",
+    "./skills/jimeng-opencli-image2image",
+    "./skills/jimeng-opencli-image2video",
+    "./skills/jimeng-opencli-text2image",
+    "./skills/jimeng-opencli-text2video",
+    "./skills/jimeng-prompt-image2image",
+    "./skills/jimeng-prompt-image2video",
+    "./skills/jimeng-prompt-text2image",
+    "./skills/jimeng-prompt-text2video"
+  ]
+}
