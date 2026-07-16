@@ -82,8 +82,8 @@ dreamina image2video --image ./photo.png --prompt="微风吹动头发和衣角�
 dreamina image2video --image ./photo.png --prompt="云层缓慢飘移，水面波纹扩散" --duration=8 --model_version=seedance2.0fast_vip --poll=0
 # Then follow 5s polling SOP
 
-# High quality (VIP)
-dreamina image2video --image ./photo.png --prompt="..." --model_version=seedance2.0_vip --poll=0
+# High quality (VIP, supports 1080P/4K in v1.4.10+)
+dreamina image2video --image ./photo.png --prompt="..." --model_version=seedance2.0_vip --video_resolution=1080P --poll=0
 # Then follow 5s polling SOP
 ```
 
@@ -92,9 +92,11 @@ dreamina image2video --image ./photo.png --prompt="..." --model_version=seedance
 | `--image` | **Yes** | Single local image path | — |
 | `--prompt` | No* | Motion description (incremental) | — |
 | `--duration` | No | 3-15s (model-dependent) | 5 |
-| `--model_version` | No | seedance2.0, seedance2.0fast, **seedance2.0_vip, seedance2.0fast_vip**, 3.0, 3.0fast, 3.0pro, 3.5pro | seedance2.0fast_vip ⬅️ VIP 优先 |
-| `--video_resolution` | No | 720P (Seedance), 1080P (legacy) | 720P |
+| `--model_version` | No | seedance2.0, seedance2.0mini (v1.4.8+), seedance2.0fast, **seedance2.0_vip, seedance2.0fast_vip** | seedance2.0fast_vip ⬅️ VIP 优先 |
+| `--video_resolution` | No | 720P (Seedance), 1080P/4K (v1.4.10+, `seedance2.0_vip` only) | 720P |
 | `--poll` | No | Seconds (0=async, polls every 1s) | 0 |
+
+> **v1.4.10 视频模型命名变更**：原 3.x 模型名（Seedance 3.0/3.5）已改名为 Seedance 1.x 系列名以与 Web 端对齐，新名请跑 `dreamina image2video -h` 取最新值。
 
 ## Mode 2: First & Last Frame (`dreamina frames2video`)
 
@@ -108,6 +110,10 @@ dreamina frames2video --first ./start.png --last ./end.png --prompt="花瓣从�
 # With duration (VIP)
 dreamina frames2video --first ./morning.png --last ./night.png --prompt="天空从橙色渐变到深蓝，城市灯光渐次亮起" --duration=10 --model_version=seedance2.0fast_vip --poll=0
 # Then follow 5s polling SOP
+
+# Highest quality (VIP, 1080P/4K in v1.4.10+)
+dreamina frames2video --first ./start.png --last ./end.png --prompt="..." --model_version=seedance2.0_vip --video_resolution=1080P --poll=0
+# Then follow 5s polling SOP
 ```
 
 | Parameter | Required | Values | Default |
@@ -116,8 +122,8 @@ dreamina frames2video --first ./morning.png --last ./night.png --prompt="天空�
 | `--last` | **Yes** | Local image path (end frame) | — |
 | `--prompt` | No* | Transition description | — |
 | `--duration` | No | 4-15s | 5 |
-| `--model_version` | No | seedance2.0, seedance2.0fast, **seedance2.0_vip, seedance2.0fast_vip**, 3.5pro | seedance2.0fast_vip ⬅️ VIP 优先 |
-| `--video_resolution` | No | 720P (Seedance), 1080P (legacy) | 720P |
+| `--model_version` | No | seedance2.0, seedance2.0mini (v1.4.8+), seedance2.0fast, **seedance2.0_vip, seedance2.0fast_vip** | seedance2.0fast_vip ⬅️ VIP 优先 |
+| `--video_resolution` | No | 720P (Seedance), 1080P/4K (v1.4.10+, `seedance2.0_vip` only) | 720P |
 
 ## Mode 3: Multi-Frame Story (`dreamina multiframe2video`)
 
@@ -190,7 +196,7 @@ dreamina multimodal2video \
 | `--prompt` | No* | Synthesis description | — |
 | `--duration` | No | 4-15s | 5 |
 | `--ratio` | No | 1:1, 3:4, 16:9, 4:3, 9:16, 21:9 | 16:9 |
-| `--model_version` | No | seedance2.0, seedance2.0fast, **seedance2.0_vip, seedance2.0fast_vip** | seedance2.0fast_vip ⬅️ VIP 优先 |
+| `--model_version` | No | seedance2.0, seedance2.0mini (v1.4.8+), seedance2.0fast, **seedance2.0_vip, seedance2.0fast_vip** | seedance2.0fast_vip ⬅️ VIP 优先 |
 
 > At least one of `--image`, `--video`, or `--audio` required. Max: 9 images + 3 videos + 3 audio.
 
@@ -202,11 +208,23 @@ A: Verify `~/.dreamina_cli/config.toml` exists. Run `dreamina user_credit` as de
 **Q: Browser login stuck?**
 A: `dreamina login --debug` for detailed output.
 
+**Q: Login shows "非法应用" (illegal application) error?**
+A: Known v1.4.x issue when Agent drives login. **Workaround: complete login manually** — log in to jimeng.jianying.com web first, run `dreamina login` in terminal, open the printed URL, click "授权". Always include `dreamina version` and `~/.dreamina_cli/logs/` snippets when reporting.
+
 **Q: Async task no final result?**
 A: Use the 5s polling SOP above — it has no timeout cap, so it will keep checking until done.
 
 **Q: Switch accounts?**
 A: `dreamina relogin`. Clear credentials: `dreamina logout`.
+
+**Q: CI / no-GUI login?**
+A: `dreamina login --headless` (prints URL/user_code/device_code, no wait) then `dreamina login checklogin --device_code=<dc> --poll=30`.
+
+**Q: 1080P/4K 走哪个模型？**
+A: v1.4.10+ 起 `seedance2.0_vip` 支持 1080P 和 4K 输出（仅 VIP 账户）。其它 Seedance 模型仍仅 720P。
+
+**Q: 模型命名变更？**
+A: v1.4.10 起原 3.x 模型名（Seedance 3.0/3.5）已统一改为 Seedance 1.x 系列以与 Web 端对齐。`dreamina image2video -h` 取最新名。
 
 ## Gotchas
 
@@ -214,13 +232,15 @@ A: `dreamina relogin`. Clear credentials: `dreamina logout`.
 2. **Prompt goes through prompt skill first** — route to jimeng-prompt-image2video for all prompt crafting
 3. **Prompt is incremental** — describe only what MOVES, not static content from reference image
 4. **Mode detection is critical** — 1 image vs 2 (frames2video) vs 2+ sequential (multiframe2video) — routing determines the sub-command and parameter names differ (`--image` vs `--images` vs `--first/--last`)
-5. **Seedance 2.0 = 720P** — written as `720P` (capital P). 1080P only on legacy 3.0/3.5pro
+5. **Resolution rules (v1.4.10+)** — 720P 默认适用于 seedance2.0 / seedance2.0fast / seedance2.0mini；1080P 和 4K 需要 `seedance2.0_vip` + VIP 账户。`720P` / `1080P` 官方使用大写 P；legacy 3.5pro 等老模型仍支持 1080P
 6. **Use 5s polling SOP instead of --poll=N** — `--poll=N` has a timeout; the 5s polling loop has no timeout and uses fewer API calls
 7. **multimodal2video max inputs** — 9 images + 3 videos + 3 audio. Exceeding this errors
 8. **multiframe2video max 20 images** — beyond this not supported
 9. **Some models need web auth** — `AigcComplianceConfirmationRequired` → authorize on website
-10. **Parameter names vary by sub-command** — `image2video` uses `--image` (singular); `multiframe2video` uses `--images` (plural); `frames2video` uses `--first`/`--last`
+10. **Parameter names vary by sub-command** — `image2video` uses `--image` (singular); `multiframe2video` uses `--images` (plural); `frames2video` uses `--first/--last`
 11. **VIP 账户优先使用 VIP 通道** — `seedance2.0fast_vip` 和 `seedance2.0_vip` 有独立 VIP 队列，速度更快、并发更高。账户 VIP 等级为 maestro，应默认为 `seedance2.0fast_vip`
+12. **CLI auto-update check (v1.3.1+)** — CLI may print a new-version prompt at startup. Always upgrade before debugging strange errors: `curl -fsSL https://jimeng.jianying.com/cli | bash`
+13. **升级 CLI 优先排查**（v1.4.x 习惯）—— 排查问题前先 curl 更新 CLI，再 reproduce 一次。官方明确"你的问题很可能在新版本已经解决"
 
 ## Available Resources
 

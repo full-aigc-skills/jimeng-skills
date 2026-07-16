@@ -66,11 +66,12 @@ dreamina image2image --images ./input.png --prompt="改成水彩风格" --model_
 ```bash
 dreamina user_credit
 ```
-If this fails, fix login first: `dreamina login` / `dreamina login --debug`. See FAQ section below.
+If this fails, fix login first: `dreamina login` / `dreamina login --debug`. For headless (CI / no GUI), use `dreamina login --headless` then poll with `dreamina login checklogin --device_code=<dc> --poll=30`. See FAQ section below.
 
-**1b. Install if needed:**
+**1b. Install / upgrade if needed:**
 ```bash
 curl -fsSL https://jimeng.jianying.com/cli | bash
+# Same command upgrades an existing install — always upgrade before debugging
 ```
 
 ### Step 2: Ensure prompt and images are ready
@@ -132,6 +133,12 @@ dreamina image2image --images ./input.png --prompt="..." --poll=0
 # Save submit_id, query later
 ```
 
+**Batch edits (v1.4.10+):**
+```bash
+dreamina image2image --images ./photo.png --prompt="同一姿势下的四种服装风格变体" --generate_num=4 --model_version=5.0 --poll=0
+# → submit_id 回来后用 query_result 下载
+```
+
 ### Step 5: Handle results → Step 6: Handle errors
 
 After generation completes:
@@ -155,8 +162,9 @@ Common errors below.
 | `--images` | **Yes** | 1-10 local file paths, comma-separated | — |
 | `--prompt` | **Yes** | String (Chinese preferred, Keep/Change style) | — |
 | `--ratio` | No | 21:9, 16:9, 3:2, 4:3, 1:1, 3:4, 2:3, 9:16 | 1:1 |
-| `--model_version` | No | 4.0, 4.1, 4.5, 5.0 | 5.0 |
+| `--model_version` | No | 4.0, 4.1, 4.5, 4.7, 5.0, **5.0 Pro** (v1.4.12+) | 5.0 |
 | `--resolution_type` | No | 2k, 4k (1k NOT supported) | 2k |
+| `--generate_num` | No (v1.4.10+) | Integer 1-10 (batch edit count) | 1 |
 | `--poll` | No | Seconds (0 = async, polls every 1s) | 0 |
 
 **Poll behavior**: `--poll=N` polls every 1 second for up to N seconds. Timeout returns "querying" intermediate result with submit_id.
@@ -165,7 +173,9 @@ Common errors below.
 
 | Model | Official Model ID | Best For |
 |-------|-------------------|----------|
-| **5.0** (default) | `doubao-seedream-5-0-260128` | Latest flagship, all I2I tasks |
+| **5.0 Pro** (v1.4.12+, 🆕) | `doubao-seedream-5-0-pro` | Latest flagship Pro for I2I |
+| **5.0** (default) | `doubao-seedream-5-0-260128` | Latest stable flagship, all I2I tasks |
+| 4.7 (v1.4.4+) | `seedream-4-7` | Latest pre-5.0 improvements |
 | 4.5 | `doubao-seedream-4-5-251128` | Artistic style transfer, landscapes |
 | 4.1 | — | Portrait editing, poster layout, multi-round edits |
 | 4.0 | `doubao-seedream-4-0-250828` | Reliable baseline |
@@ -176,16 +186,19 @@ Common errors below.
 
 ```bash
 # Credit & auth
-dreamina user_credit                          # Check credits
-dreamina login                                # Login
-dreamina login --debug                        # Debug login
-dreamina relogin                              # Switch accounts
-dreamina logout                               # Clear credentials
+dreamina user_credit                          # Check credits (definitive self-check)
+dreamina login                                # Login (OAuth browser, default)
+dreamina login --debug                        # Debug login flow
+dreamina login --headless                     # Headless: print verification_uri/user_code/device_code
+dreamina login checklogin --device_code=<dc> --poll=30   # Poll headless login status
+dreamina relogin                              # Switch accounts (clears OAuth state)
+dreamina logout                               # Clear OAuth credentials only
 
 # Image-to-image generation
 dreamina image2image --images ./x.png --prompt="改成水彩风格" --poll=30
 dreamina image2image --images ./a.png,./b.png --prompt="combine style of first with subject of second"
 dreamina image2image --images ./x.png --prompt="..." --model_version=5.0 --resolution_type=4k --poll=30
+dreamina image2image --images ./x.png --prompt="..." --generate_num=4 --poll=0   # v1.4.10+ batch 4 edits
 
 # Task management
 dreamina query_result --submit_id=<id>
@@ -194,9 +207,16 @@ dreamina list_task
 dreamina list_task --gen_status=success
 dreamina list_task --submit_id=<id>
 
-# Session
+# Session (v1.3.5+: full CRUD + search)
 dreamina session create "edit-project"
 dreamina session list
+dreamina session search "关键词"
+dreamina session rename <id> "新名字"
+dreamina session delete <id>
+
+# Utility
+dreamina image_upscale --image ./x.png --resolution_type=4k   # 4k/8k requires VIP
+dreamina version
 ```
 
 ## FAQ (from official documentation)
@@ -207,6 +227,9 @@ A: (1) Run `dreamina user_credit` — if this fails, login/config is the issue. 
 **Q: Browser login flow is stuck?**
 A: Use `dreamina login --debug` for detailed debug output.
 
+**Q: Login shows "非法应用" (illegal application) error?**
+A: Known issue in v1.4.x: when an Agent runs `dreamina login` and prints the verification URL, opening it in browser may show "非法应用" (JSON format error). **Workaround: complete login manually** — log in to jimeng.jianying.com web first, then run `dreamina login` in terminal, open the printed URL, click "授权", and let CLI receive web login state. Official team is still investigating root cause; always include `dreamina version` and `~/.dreamina_cli/logs/` snippets when reporting.
+
 **Q: Async task shows no final result?**
 A: Use `--poll=N` for auto-waiting. If timeout, save submit_id and query manually.
 
@@ -216,6 +239,12 @@ A: `dreamina relogin` clears login state and starts new flow.
 **Q: How to completely clear local login info?**
 A: `dreamina logout` clears `credential.json` only. `config.toml` and `tasks.db` are preserved.
 
+**Q: How to use login in CI / no-GUI environments?**
+A: `dreamina login --headless` prints `verification_uri` + `user_code` + `device_code` only, returns immediately. Then poll with `dreamina login checklogin --device_code=<dc> --poll=30` (poll=0 = check once).
+
+**Q: How to report a bug to the team?**
+A: Always include: (1) full command you ran, (2) terminal output / error message, (3) `dreamina version` output, (4) `~/.dreamina_cli/logs/` snippets, (5) `submit_id` if it's a generation task.
+
 ## Gotchas
 
 1. **Always check credits first** — never run generation without `dreamina user_credit`
@@ -223,12 +252,15 @@ A: `dreamina logout` clears `credential.json` only. `config.toml` and `tasks.db`
 3. **Images must be local files** — `--images` requires local paths, not URLs. Verify files exist before submitting
 4. **I2I requires model 4.0+** — 3.0/3.1 are NOT supported for image-to-image
 5. **Resolution 2k/4k only** — 1k is NOT available for I2I
-6. **Max 10 images** — comma-separated: `--images ./a.png,./b.png,./c.png`
+6. **Max 10 input images** — comma-separated: `--images ./a.png,./b.png,./c.png`. Beyond 10 → CLI error
 7. **`--poll` polls every 1 second** — timeout returns "querying" (not failure), use `query_result` to check later
 8. **Edit prompt style matters** — use Keep/Change framework from jimeng-prompt-image2image. Undescribed elements may change unexpectedly
 9. **`~/.dreamina_cli/` directory** — may contain config.toml, credential.json, tasks.db after native (non-Docker) login. In Docker setups, these files may be absent (auth stored ephemerally). Don't delete the directory
-10. **图片类不支持 VIP 通道** — dreamina image2image 的 `--model_version` 参数只有 `4.0, 4.1, 4.5, 4.6, 5.0`，没有 `_vip` 变体。VIP 通道仅限视频类子命令。如需确认 CLI 实际支持的参数，运行 `dreamina image2image -h`——CLI help 输出是唯一真相来源，技能文档可能滞后
-11. **不要写 shell 死循环做任务轮询** — 提交任务时用 `--poll=0` 获取 submit_id，然后由智能体在对话轮次中每 ~5 秒调用一次 `query_result`。禁止 `while true; sleep 5;` 阻塞终端。智能体需根据 gen_status 做分支判断（继续等/报结果/通知超时）
+10. **图片类不支持 VIP 通道** — dreamina image2image 的 `--model_version` 参数只有 `4.0, 4.1, 4.5, 4.7, 5.0, 5.0 Pro`，没有 `_vip` 变体。VIP 通道仅限视频类子命令。如需确认 CLI 实际支持的参数，运行 `dreamina image2image -h`——CLI help 输出是唯一真相来源，技能文档可能滞后
+11. **`generate_num` 批量 (v1.4.10+)** — 一次 CLI 调用产生 1-10 张编辑图；submit_id 回来后用 `query_result --download_dir=<dir>` 批量下载
+12. **CLI auto-update check** (v1.3.1+) — CLI may print a new-version prompt at startup. Always upgrade before debugging strange errors: `curl -fsSL https://jimeng.jianying.com/cli | bash`
+13. **升级 CLI 优先排查**（v1.4.x 习惯）—— 排查问题前先 curl 更新 CLI，再 reproduce 一次。官方明确"你的问题很可能在新版本已经解决"
+14. **不要写 shell 死循环做任务轮询** — 提交任务时用 `--poll=0` 获取 submit_id，然后由智能体在对话轮次中每 ~5 秒调用一次 `query_result`。禁止 `while true; sleep 5;` 阻塞终端。智能体需根据 gen_status 做分支判断（继续等/报结果/通知超时）
 
 ## Available Resources
 

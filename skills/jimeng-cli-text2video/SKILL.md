@@ -162,6 +162,22 @@ dreamina text2video \
   --poll=120
 ```
 
+**Highest quality VIP with 1080P / 4K (v1.4.10+):**
+```bash
+dreamina text2video \
+  --prompt="..." \
+  --duration=8 \
+  --model_version=seedance2.0_vip \
+  --video_resolution=1080P \
+  --poll=180
+# 4K 也可: --video_resolution=4k (需 seedance2.0_vip + VIP 账户)
+```
+
+**Cheap mini variant (v1.4.8+):**
+```bash
+dreamina text2video --prompt="..." --duration=5 --model_version=seedance2.0mini --poll=60
+```
+
 **Async (batch or non-blocking):**
 ```bash
 dreamina text2video --prompt="..." --poll=0
@@ -193,26 +209,30 @@ dreamina query_result --submit_id=<id>
 | `--prompt` | **Yes** | String with motion + camera description | — |
 | `--duration` | No | 4-15 (seconds) | 5 |
 | `--ratio` | No | 1:1, 3:4, 16:9, 4:3, 9:16, 21:9 | 16:9 |
-| `--video_resolution` | No | 720P (Seedance 2.0) | 720P |
-| `--model_version` | No | seedance2.0, seedance2.0fast, seedance2.0_vip, seedance2.0fast_vip | seedance2.0fast |
+| `--video_resolution` | No | 720P (Seedance 2.0), 1080P (seedance2.0_vip, v1.4.3+), **4K (seedance2.0_vip, v1.4.10+)** | 720P |
+| `--model_version` | No | seedance2.0, seedance2.0mini (v1.4.8+), seedance2.0fast, seedance2.0fast_vip, seedance2.0_vip | seedance2.0fast |
 | `--session` | No | Integer session ID | 0 |
 | `--poll` | No | Seconds (0 = async, polls every 1s) | 0 |
+
+> **v1.4.10 视频模型命名变更**：原 `3.x` 模型名（Seedance 3.0/3.5）已更名为 `Seedance 1.x` 模型名以与 Web 端对齐。新模型名请跑 `dreamina text2video -h` 取最新值。
 
 **Poll behavior**: `--poll=N` polls every 1 second for up to N seconds. If task completes within N → result returned. If N seconds elapse → "querying" intermediate result returned with submit_id.
 
 ## Model Selection Guide
 
-| Model | Speed | Quality | Cost | Best For |
-|-------|-------|---------|------|----------|
-| **seedance2.0fast** (default) | Fast (~2-5 min) | Good | Standard | Iteration, quick tests, general use |
-| seedance2.0 | Slow (~5-15 min) | Excellent | Standard | Final output, high quality |
-| seedance2.0fast_vip | Fast | Good | VIP | VIP fast generation |
-| seedance2.0_vip | Slow | Excellent | VIP | VIP high quality |
+| Model | Speed | Quality | Cost | Resolutions | Best For |
+|-------|-------|---------|------|-------------|----------|
+| **seedance2.0fast** (default) | Fast (~2-5 min) | Good | Standard | 720P | Iteration, quick tests |
+| seedance2.0 | Slow (~5-15 min) | Excellent | Standard | 720P | Final output, high quality |
+| seedance2.0mini (v1.4.8+, 🆕) | Fast | Good | Standard | 720P | Cheaper/faster mini variant |
+| seedance2.0fast_vip | Fast | Good | VIP | 720P | VIP fast generation, priority queue |
+| seedance2.0_vip (v1.4.3+) | Slow | Excellent | VIP | 720P / **1080P** / **4K (v1.4.10+)** | VIP highest quality, 1080P & 4K |
 
 **Recommendation (VIP 账户优先)**：用户当前账户 VIP 等级为 maestro，应优先使用 VIP 通道以获得更快速度和更高并发：
 - `seedance2.0fast_vip` — **首选**：快速迭代，VIP 通道优先
-- `seedance2.0_vip` — 高质量最终输出，VIP 通道优先
+- `seedance2.0_vip` — 高质量最终输出，VIP 通道优先（支持 1080P 和 4K）
 - `seedance2.0fast` — 备用（非 VIP 通道，标准速度）
+- `seedance2.0mini` — 想试 Seedance 新模型又不想走 VIP 队列时的低成本选项
 - `seedance2.0` — 备用高质量（非 VIP 通道）
 
 ## Essential CLI Commands
@@ -220,13 +240,19 @@ dreamina query_result --submit_id=<id>
 ```bash
 # Credit & auth
 dreamina user_credit                          # Check credit balance
-dreamina login                                # Login (OAuth browser)
+dreamina login                                # Login (OAuth browser, default)
 dreamina login --debug                        # Login with debug output
+dreamina login --headless                     # Headless: print URL/user_code/device_code only
+dreamina login checklogin --device_code=<dc> --poll=30   # Poll headless login
+dreamina relogin                              # Switch account (clears OAuth state)
+dreamina logout                               # Clear OAuth credentials only
 
 # Video generation
 dreamina text2video --prompt="..." --duration=8 --poll=60
 dreamina text2video --prompt="..." --duration=5 --ratio=9:16 --poll=60
 dreamina text2video --prompt="..." --model_version=seedance2.0 --poll=120
+dreamina text2video --prompt="..." --model_version=seedance2.0mini --poll=60   # v1.4.8+ cheap mini
+dreamina text2video --prompt="..." --model_version=seedance2.0_vip --video_resolution=1080P --poll=180   # 1080P/4K VIP
 
 # Task management
 dreamina query_result --submit_id=<id>        # Check task status
@@ -235,9 +261,14 @@ dreamina list_task                            # List all tasks
 dreamina list_task --gen_status=success       # Filter by status
 dreamina list_task --submit_id=<id>           # Filter by submit_id
 
-# Session management
+# Session (v1.3.5+: full CRUD + search)
 dreamina session create "video-project"       # Create session
-dreamina session list                         # List sessions
+dreamina session list                         # List recent sessions
+dreamina session search "关键词"              # Search
+dreamina session rename <id> "新名字"         # Rename
+dreamina session delete <id>                  # Delete
+
+dreamina version                              # CLI version + build info
 ```
 
 ## Duration-to-Action Guide
@@ -258,11 +289,23 @@ A: (1) Verify `~/.dreamina_cli/config.toml` exists; (2) Run `dreamina user_credi
 **Q: Browser login flow is stuck?**
 A: Use `dreamina login --debug` for detailed debug output.
 
+**Q: Login shows "非法应用" (illegal application) error?**
+A: Known v1.4.x issue: when Agent runs `dreamina login` and prints the verification URL, browser shows "非法应用" (JSON format error). **Workaround: complete login manually** — log in to jimeng.jianying.com web first, then run `dreamina login` in terminal, open the printed URL, click "授权". Always include `dreamina version` and `~/.dreamina_cli/logs/` snippets when reporting.
+
 **Q: Async task shows no final result?**
 A: Use `--poll=N` for auto-waiting. If timeout, save submit_id from intermediate result and query: `dreamina query_result --submit_id=<id>`.
 
 **Q: How to switch accounts?**
 A: `dreamina relogin` clears login state and starts new flow.
+
+**Q: How to use login in CI / no-GUI?**
+A: `dreamina login --headless` then poll with `dreamina login checklogin --device_code=<dc> --poll=30`.
+
+**Q: 1080P / 4K 视频走哪个模型？**
+A: `seedance2.0_vip` 是 v1.4.3+ 支持 1080P、v1.4.10+ 支持 4K 的唯一官方通道；标准 `seedance2.0` 仅 720P，seedance2.0_vip 需要 VIP 账户。
+
+**Q: Seedance 模型命名变了？**
+A: v1.4.10 起，原 3.x 模型名（Seedance 3.0/3.5）已统一改为 Seedance 1.x 系列命名以与 Web 端保持一致。详见 `dreamina text2video -h` 的最新输出。
 
 ## Gotchas
 
@@ -270,13 +313,15 @@ A: `dreamina relogin` clears login state and starts new flow.
 2. **Prompt goes through prompt skill first** — don't craft video prompts here. Route to jimeng-prompt-text2video
 3. **`--poll` polls every 1 second** — `--poll=60` means up to 60 polling attempts. Timeout returns "querying" (not failure)
 4. **Video takes much longer than images** — expect 2-15 minutes. Use `--poll=120` for high-quality models
-5. **720P is the only resolution for Seedance 2.0** — written as `720P` (capital P in official docs). 1080p only available with legacy models
+5. **Resolution rules** (v1.4.10+) — 720P is the default for `seedance2.0 / seedance2.0fast / seedance2.0mini`; 1080P and 4K require `seedance2.0_vip` + VIP account. Written as `720P` / `1080P` (capital P) for VIP models per official docs
 6. **Match duration to action** — don't cram a 3-stage narrative into a 5-second clip
-7. **Default model is seedance2.0fast** — good quality, faster. Use seedance2.0 for final renders
+7. **Default model is seedance2.0fast** — good quality, faster. Use seedance2.0 for final renders; try seedance2.0mini (v1.4.8+) for cheap/fast experimentation
 8. **Some models need web auth first** — if `AigcComplianceConfirmationRequired`, authorize on dreamina website
 9. **VIP 账户优先使用 VIP 通道** — `seedance2.0fast_vip` 和 `seedance2.0_vip` 有独立 VIP 队列，速度更快、并发更高。账户 VIP 等级为 maestro，应默认为 `seedance2.0fast_vip`
-10. **不要写 shell 死循环做任务轮询** — 提交任务时用 `--poll=0` 获取 submit_id，然后由智能体在对话轮次中每 ~5 秒调用一次 `query_result`。禁止 `while true; sleep 5;` 阻塞终端。智能体需根据 gen_status 做分支判断（继续等/报结果/通知超时）
-11. **`~/.dreamina_cli/` directory** — may contain config.toml, credential.json, tasks.db after native (non-Docker) login. In Docker setups, these files may be absent (auth stored ephemerally). Don't delete
+10. **CLI auto-update check (v1.3.1+)** — CLI may print a new-version prompt at startup. Always upgrade before debugging strange errors: `curl -fsSL https://jimeng.jianying.com/cli | bash`
+11. **升级 CLI 优先排查**（v1.4.x 习惯）—— 排查问题前先 curl 更新 CLI，再 reproduce 一次。官方明确"你的问题很可能在新版本已经解决"
+12. **不要写 shell 死循环做任务轮询** — 提交任务时用 `--poll=0` 获取 submit_id，然后由智能体在对话轮次中每 ~5 秒调用一次 `query_result`。禁止 `while true; sleep 5;` 阻塞终端。智能体需根据 gen_status 做分支判断（继续等/报结果/通知超时）
+13. **`~/.dreamina_cli/` directory** — may contain config.toml, credential.json, tasks.db after native (non-Docker) login. In Docker setups, these files may be absent (auth stored ephemerally). Don't delete
 
 ## Available Resources
 
