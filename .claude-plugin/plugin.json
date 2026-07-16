@@ -9,6 +9,7 @@
   "repository": "https://github.com/full-aigc-skills/jimeng-skills",
   "source": "./",
   "skills": [
+    "./skills/dreamina-cli",
     "./skills/jimeng-cli-image2image",
     "./skills/jimeng-cli-image2video",
     "./skills/jimeng-cli-text2image",

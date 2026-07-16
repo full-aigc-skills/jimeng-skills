@@ -30,10 +30,11 @@ npx skills add full-aigc-skills/jimeng-skills
 
 Or install specific skills: `npx skills add full-aigc-skills/jimeng-skills --skill <skill-name>`
 
-## 🎯 Skills (12)
+## 🎯 Skills (13)
 
 | Skill | Description |
 |-------|-------------|
+| `dreamina-cli` | Umbrella skill shipped with the dreamina CLI v1.4.8+ for cross-cutting concerns: OAuth Device Flow login, session CRUD, task history, and command selection. Delegates modal-specific SOPs to the four `jimeng-cli-*` skills. |
 | `jimeng-cli-image2image` |  Provides comprehensive guidance for executing image-to-image (图生图) editing via the dreamina CLI for |
 | `jimeng-cli-image2video` |  "Provides comprehensive guidance for executing image-to-video (图生视频) generation via the dreamina CL |
 | `jimeng-cli-text2image` |  Provides comprehensive guidance for executing text-to-image generation via the dreamina CLI for 即梦  |
