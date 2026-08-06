@@ -15,6 +15,7 @@ dreamina user_credit
 
 # 2. 提交生成（视频生成慢，至少 --poll=60）
 dreamina text2video \
+  --video_resolution=720p \
   --prompt="<video prompt with motion + camera>" \
   --duration=8 \
   --ratio=16:9 \
@@ -39,6 +40,7 @@ dreamina user_credit
 
 # 使用 seedance2.0 + 长 poll
 dreamina text2video \
+  --video_resolution=720p \
   --prompt="<final prompt>" \
   --duration=10 \
   --model_version=seedance2.0 \
@@ -59,11 +61,11 @@ dreamina query_result --submit_id=<id> --download_dir=./output
 dreamina user_credit
 
 # 逐个异步提交
-dreamina text2video --prompt="<prompt1>" --duration=5 --poll=0
+dreamina text2video --prompt="<prompt1>" --duration=5 --poll=0 --video_resolution=720p
 # → submit_id: vid-001
-dreamina text2video --prompt="<prompt2>" --duration=5 --poll=0
+dreamina text2video --prompt="<prompt2>" --duration=5 --poll=0 --video_resolution=720p
 # → submit_id: vid-002
-dreamina text2video --prompt="<prompt3>" --duration=8 --poll=0
+dreamina text2video --prompt="<prompt3>" --duration=8 --poll=0 --video_resolution=720p
 # → submit_id: vid-003
 
 # 等待一段时间后统一查询
@@ -86,7 +88,7 @@ dreamina query_result --submit_id=vid-003
 2. jimeng-cli-text2video 执行：
    a. dreamina user_credit
    b. 映射参数：时长 → --duration, 比例 → --ratio
-   c. dreamina text2video --prompt="<approved>" --duration=N --ratio=X:Y --poll=60
+   c. dreamina text2video --prompt="<approved>" --duration=N --ratio=X:Y --poll=60 --video_resolution=720p
    d. 报告结果或 submit_id
 ```
 

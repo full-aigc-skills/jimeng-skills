@@ -40,6 +40,7 @@ dreamina user_credit
 # 异步批量提交
 for img in photo1.png photo2.png photo3.png; do
   dreamina image2image \
+    --resolution_type=2k \
     --images ./$img \
     --prompt="保持构图和人物不变，转换成水墨画风格，黑白灰墨色，留白" \
     --poll=0
@@ -65,6 +66,7 @@ ls -la ./subject.png ./style.png ./background.png
 
 # 提交多图合成
 dreamina image2image \
+  --resolution_type=2k \
   --images ./subject.png,./style.png,./background.png \
   --prompt="参考第一张的人物特征，应用第二张的水墨风格，配上第三张的竹林背景。所有元素光源方向统一。全局色调协调。" \
   --poll=30
@@ -82,7 +84,7 @@ dreamina image2image \
 2. jimeng-cli-image2image 执行：
    a. dreamina user_credit
    b. ls -la <image paths>           ← 验证图片存在
-   c. dreamina image2image --images ... --prompt="<approved>"
+   c. dreamina image2image --images ... --prompt="<approved>" --resolution_type=2k
    d. 报告结果
 ```
 

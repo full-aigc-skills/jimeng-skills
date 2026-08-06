@@ -16,7 +16,7 @@
 
 ## 📖 简介
 
-**jimeng-skills** 是一组 AI 编码智能体技能，属于 [Full AIGC Skills](https://github.com/full-aigc-skills) 生态。包含 **12 个技能**。
+**jimeng-skills** 是一组 AI 编码智能体技能，属于 [Full AIGC Skills](https://github.com/full-aigc-skills) 生态。包含 **13 个技能**。
 
 ## 📦 安装
 
@@ -28,7 +28,7 @@ npx skills add full-aigc-skills/jimeng-skills
 
 | 技能 | 描述 |
 |------|------|
-| `dreamina-cli` | dreamina CLI v1.4.8+ 配套的总览技能，覆盖 OAuth Device Flow 登录、会话 CRUD、任务历史、子命令选择等横切关注点；具体模态的执行 SOP 委派给四个 `jimeng-cli-*` 技能。 |
+| `dreamina-cli` | dreamina CLI v1.4.14 总览技能，覆盖必填分辨率、精确模型 token、异步终态、OAuth 登录、会话 CRUD、任务历史与子命令路由。 |
 | `jimeng-cli-image2image` |  Provides comprehensive guidance for executing image-to-image (图生图) editing via the dreamina CLI for |
 | `jimeng-cli-image2video` |  "Provides comprehensive guidance for executing image-to-video (图生视频) generation via the dreamina CL |
 | `jimeng-cli-text2image` |  Provides comprehensive guidance for executing text-to-image generation via the dreamina CLI for 即梦  |

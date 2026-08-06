@@ -34,9 +34,9 @@ dreamina text2image \
 dreamina query_result --submit_id=xyz-789
 
 # 可能输出:
-# Status: processing  → 还在生成中，稍后再查
+# Status: querying    → 还在生成中，稍后再查
 # Status: success     → 生成完成，报告结果
-# Status: failed      → 生成失败，查看错误原因
+# Status: fail      → 生成失败，查看错误原因
 ```
 
 ### Example: 批量异步+统一查询
@@ -50,7 +50,7 @@ dreamina user_credit
 # 提交10个任务，收集ID
 ids=()
 for prompt in "提示词1" "提示词2" ... "提示词10"; do
-  output=$(dreamina text2image --prompt="$prompt" --ratio=1:1 --poll=0)
+  output=$(dreamina text2image --prompt="$prompt" --ratio=1:1 --poll=0 --resolution_type=2k)
   id=$(echo "$output" | grep -oP 'submit_id: \K\S+')
   ids+=("$id")
   echo "Submitted: $id"
@@ -71,14 +71,14 @@ done
 ```bash
 # 查询发现失败
 dreamina query_result --submit_id=xyz-789
-# Status: failed
+# Status: fail
 # Error: AigcComplianceConfirmationRequired
 
 # 诊断：模型需要首次Web授权
 # 告知用户去网页端授权后重试
 
 # 授权完成后，用同样的提示词重新提交
-dreamina text2image --prompt="<same prompt>" --ratio=21:9 --poll=30
+dreamina text2image --prompt="<same prompt>" --ratio=21:9 --poll=30 --resolution_type=2k
 ```
 
 ## Key Commands
@@ -97,5 +97,5 @@ dreamina list_task
 dreamina list_task --gen_status=success
 
 # 只列处理中的
-dreamina list_task --gen_status=processing
+dreamina list_task --gen_status=querying
 ```

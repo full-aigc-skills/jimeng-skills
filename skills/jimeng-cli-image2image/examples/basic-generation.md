@@ -29,6 +29,7 @@ dreamina user_credit
 ls -la ./portrait.png
 
 dreamina image2image \
+  --resolution_type=2k \
   --images ./portrait.png \
   --prompt="保持人物面部特征、表情、姿势和服装完全不变。将纯色室内背景替换为阳光明媚的热带海滩。调整人物身上光线色温匹配海滩阳光。在脚下添加自然沙滩阴影。" \
   --ratio=3:4 \
@@ -61,6 +62,7 @@ dreamina user_credit
 ls -la ./warm_photo.png
 
 dreamina image2image \
+  --resolution_type=2k \
   --images ./warm_photo.png \
   --prompt="保持构图和所有内容完全不变。将整体色调从暖黄色调整为冷蓝色调。降低暖色的饱和度，增强冷色的比重。肤色在冷调中保持自然不偏青。色彩过渡平滑自然。" \
   --poll=30

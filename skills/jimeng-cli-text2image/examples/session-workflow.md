@@ -20,14 +20,17 @@ dreamina session create "spring-collection-2026"
 dreamina user_credit
 
 dreamina text2image \
+  --resolution_type=2k \
   --prompt="米色风衣平铺拍摄，纯白背景，柔和自然光，服装电商摄影，2K" \
   --session=42 --ratio=1:1 --model_version=4.6 --poll=30
 
 dreamina text2image \
+  --resolution_type=2k \
   --prompt="米色风衣模特上身效果，都市街景背景，自然行走姿态，时尚电商摄影，2K" \
   --session=42 --ratio=3:4 --model_version=4.6 --poll=30
 
 dreamina text2image \
+  --resolution_type=2k \
   --prompt="米色风衣细节特写，面料纹理，纽扣和缝线，微距产品摄影，2K" \
   --session=42 --ratio=1:1 --model_version=4.6 --poll=30
 ```
@@ -47,7 +50,7 @@ dreamina session list
 dreamina session search "spring"
 
 # 在找到的会话中继续生成
-dreamina text2image --prompt="..." --session=42 --ratio=1:1 --poll=30
+dreamina text2image --prompt="..." --session=42 --ratio=1:1 --poll=30 --resolution_type=2k
 ```
 
 ### Example: 查看项目生成历史
@@ -73,7 +76,7 @@ dreamina session list
 dreamina session search "keyword"
 
 # 生成时指定会话
-dreamina text2image --prompt="..." --session=<id>
+dreamina text2image --prompt="..." --session=<id> --resolution_type=2k
 
 # 查看任务历史
 dreamina list_task

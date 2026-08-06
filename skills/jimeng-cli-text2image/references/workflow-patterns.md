@@ -38,11 +38,11 @@ dreamina text2image \
 dreamina user_credit
 
 # 2. 逐个提交（不等待）
-dreamina text2image --prompt="<prompt1>" --ratio=1:1 --poll=0
+dreamina text2image --prompt="<prompt1>" --ratio=1:1 --poll=0 --resolution_type=2k
 # 保存 submit_id_1
-dreamina text2image --prompt="<prompt2>" --ratio=1:1 --poll=0
+dreamina text2image --prompt="<prompt2>" --ratio=1:1 --poll=0 --resolution_type=2k
 # 保存 submit_id_2
-dreamina text2image --prompt="<prompt3>" --ratio=1:1 --poll=0
+dreamina text2image --prompt="<prompt3>" --ratio=1:1 --poll=0 --resolution_type=2k
 # 保存 submit_id_3
 
 # 3. 轮询查询所有任务
@@ -66,8 +66,8 @@ dreamina session create "autumn-collection"
 # 假设返回 session_id=42
 
 # 2. 在会话中连续生成
-dreamina text2image --prompt="..." --session=42 --ratio=3:4 --poll=30
-dreamina text2image --prompt="..." --session=42 --ratio=3:4 --poll=30
+dreamina text2image --prompt="..." --session=42 --ratio=3:4 --poll=30 --resolution_type=2k
+dreamina text2image --prompt="..." --session=42 --ratio=3:4 --poll=30 --resolution_type=2k
 
 # 3. 查看会话中的所有任务
 dreamina list_task --gen_status=success
@@ -87,7 +87,7 @@ dreamina list_task --gen_status=success
 2. jimeng-cli-text2image 执行：
    a. dreamina user_credit
    b. 将提示词的建议参数映射到CLI参数
-   c. dreamina text2image --prompt="<approved prompt>" --ratio=... --model_version=...
+   c. dreamina text2image --prompt="<approved prompt>" --ratio=... --model_version=... --resolution_type=2k
    d. 报告结果
 ```
 

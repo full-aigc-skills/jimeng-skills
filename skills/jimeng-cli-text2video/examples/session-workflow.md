@@ -21,16 +21,19 @@ dreamina user_credit
 
 # 开场视频
 dreamina text2video \
+  --video_resolution=720p \
   --prompt="镜头从高空航拍缓缓下降，展现夏日海滩的全景，碧蓝海水和白色沙滩，遮阳伞点缀海岸，8秒" \
   --session=10 --duration=8 --ratio=16:9 --poll=60
 
 # 产品展示视频
 dreamina text2video \
+  --video_resolution=720p \
   --prompt="产品在沙滩上的白色亚麻布上缓缓旋转，阳光在瓶身切割面上流动，海浪在背景中轻轻拍岸，8秒，广告质感" \
   --session=10 --duration=8 --ratio=16:9 --poll=60
 
 # 生活场景视频
 dreamina text2video \
+  --video_resolution=720p \
   --prompt="年轻人在沙滩上奔跑，溅起水花，回头大笑，夕阳金色逆光，镜头跟拍，6秒，生活方式摄影风格" \
   --session=10 --duration=6 --ratio=16:9 --poll=60
 ```
@@ -48,7 +51,7 @@ dreamina session list
 dreamina session search "brand"
 
 # 在找到的会话中继续生成
-dreamina text2video --prompt="..." --session=10 --duration=5 --poll=60
+dreamina text2video --prompt="..." --session=10 --duration=5 --poll=60 --video_resolution=720p
 ```
 
 ### Example: 查看项目视频历史
@@ -73,7 +76,7 @@ dreamina list_task --submit_id=<id>
 dreamina session create "name"     # 创建
 dreamina session list              # 列表
 dreamina session search "keyword"  # 搜索
-dreamina text2video --prompt="..." --session=<id>  # 生成到指定会话
+dreamina text2video --prompt="..." --session=<id>  --video_resolution=720p  # 生成到指定会话
 dreamina list_task                 # 查看历史
 ```
 

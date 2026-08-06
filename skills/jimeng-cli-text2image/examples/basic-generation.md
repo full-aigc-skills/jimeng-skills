@@ -44,7 +44,7 @@ dreamina text2image \
 **执行**: 使用默认参数
 ```bash
 dreamina user_credit
-dreamina text2image --prompt="一只橘猫在窗台上晒太阳" --poll=30
+dreamina text2image --prompt="一只橘猫在窗台上晒太阳" --poll=30 --resolution_type=2k
 ```
 
 ### Example: 指定比例生成
@@ -57,6 +57,7 @@ dreamina text2image --prompt="一只橘猫在窗台上晒太阳" --poll=30
 ```bash
 dreamina user_credit
 dreamina text2image \
+  --resolution_type=2k \
   --prompt="极简风格的抽象山峦，日落色调，渐变的暖橙色天空" \
   --ratio=9:16 \
   --poll=30
@@ -72,6 +73,7 @@ dreamina text2image \
 ```bash
 dreamina user_credit
 dreamina text2image \
+  --resolution_type=2k \
   --prompt="职业女性商务肖像，深蓝西装，自信微笑，办公室窗边自然光，商业人像摄影" \
   --ratio=3:4 \
   --model_version=4.6 \
@@ -83,6 +85,6 @@ dreamina text2image \
 ```
 1. dreamina user_credit                    ← 总是第一步
 2. 将提示词的建议参数映射为 CLI 参数
-3. dreamina text2image --prompt="..." ... --poll=30
+3. dreamina text2image --prompt="..." ... --poll=30 --resolution_type=2k
 4. 报告结果给用户
 ```

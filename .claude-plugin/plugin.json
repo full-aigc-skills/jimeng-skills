@@ -1,7 +1,7 @@
 {
   "name": "jimeng-skills",
-  "version": "1.1.0",
-  "description": "即梦 (Jimeng) AIGC skills — text-to-image, image-to-image, text-to-video, image-to-video via CLI and Prompt; covers dreamina CLI v1.4.12 (Seedream 5.0 Pro, generate_num batch, session full CRUD, headless login, seedance2.0_vip 1080P/4K)",
+  "version": "1.2.0",
+  "description": "即梦 (Jimeng) AIGC skills — CLI v1.4.14 required resolution, custom image dimensions, exact Seedream/Seedance tokens, terminal statuses, sessions, and Prompt workflows",
   "author": {
     "name": "AIGC Skills Community"
   },

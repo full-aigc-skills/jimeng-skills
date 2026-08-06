@@ -11,6 +11,7 @@ dreamina user_credit
 ls -la ./photo.png                    # 验证图片存在
 
 dreamina image2video \
+  --video_resolution=720p \
   --image ./photo.png \
   --prompt="微风吹动发丝，眼睛缓慢眨动，镜头缓缓推近" \
   --duration=6 \
@@ -24,6 +25,7 @@ dreamina user_credit
 ls -la ./start.png ./end.png          # 验证两张图片
 
 dreamina frames2video \
+  --video_resolution=720p \
   --first ./start.png \
   --last ./end.png \
   --prompt="花瓣从含苞到完全盛开，外层先开内层随后逐层绽放" \
@@ -39,10 +41,14 @@ dreamina user_credit
 ls -la ./f1.png ./f2.png ./f3.png ./f4.png
 
 dreamina multiframe2video \
+  --video_resolution=720p \
   --images ./f1.png,./f2.png,./f3.png,./f4.png \
-  --prompt="沉思→惊喜→急切→喜悦的情绪递进" \
-  --transition-prompt="镜头跟随情绪节奏，帧间平滑过渡" \
-  --duration=15 \
+  --transition-prompt="从沉思过渡到惊喜，镜头缓慢推进" \
+  --transition-prompt="从惊喜过渡到急切，镜头加速跟随" \
+  --transition-prompt="从急切过渡到喜悦，镜头稳定在笑容" \
+  --transition-duration=3 \
+  --transition-duration=3 \
+  --transition-duration=3 \
   --poll=120
 ```
 
@@ -53,7 +59,9 @@ dreamina user_credit
 ls -la ./person.png ./scene.png ./music.mp3
 
 dreamina multimodal2video \
-  --image ./person.png,./scene.png \
+  --video_resolution=720p \
+  --image ./person.png \
+  --image ./scene.png \
   --audio ./music.mp3 \
   --prompt="图一人物特征配图二场景环境。运动节奏跟随音频。光源统一。色调协调。" \
   --duration=10 \

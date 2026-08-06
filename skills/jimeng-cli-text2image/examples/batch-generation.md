@@ -16,16 +16,16 @@
 dreamina user_credit
 
 # Step 2: 逐个提交（不等待）
-dreamina text2image --prompt="樱花盛开的春日公园，粉色花海，新绿草地，温暖晨光" --ratio=16:9 --poll=0
+dreamina text2image --prompt="樱花盛开的春日公园，粉色花海，新绿草地，温暖晨光" --ratio=16:9 --poll=0 --resolution_type=2k
 # → submit_id: abc-001
 
-dreamina text2image --prompt="葱郁的夏日公园，茂密绿树成荫，金色阳光，蝉鸣时节" --ratio=16:9 --poll=0
+dreamina text2image --prompt="葱郁的夏日公园，茂密绿树成荫，金色阳光，蝉鸣时节" --ratio=16:9 --poll=0 --resolution_type=2k
 # → submit_id: abc-002
 
-dreamina text2image --prompt="秋日公园红叶满地，金黄和深红的落叶，暖色夕阳斜照" --ratio=16:9 --poll=0
+dreamina text2image --prompt="秋日公园红叶满地，金黄和深红的落叶，暖色夕阳斜照" --ratio=16:9 --poll=0 --resolution_type=2k
 # → submit_id: abc-003
 
-dreamina text2image --prompt="冬日雪后公园，银装素裹，白雪覆盖的长椅和树枝，清冷蓝调" --ratio=16:9 --poll=0
+dreamina text2image --prompt="冬日雪后公园，银装素裹，白雪覆盖的长椅和树枝，清冷蓝调" --ratio=16:9 --poll=0 --resolution_type=2k
 # → submit_id: abc-004
 
 # Step 3: 轮询查询所有结果
@@ -48,13 +48,13 @@ dreamina query_result --submit_id=abc-004
 dreamina user_credit
 
 # 横版 — 适合PC端
-dreamina text2image --prompt="现代极简客厅，大落地窗引入绿色庭院，原木色和白色配色" --ratio=16:9 --poll=30
+dreamina text2image --prompt="现代极简客厅，大落地窗引入绿色庭院，原木色和白色配色" --ratio=16:9 --poll=30 --resolution_type=2k
 
 # 正方形 — 适合社交媒体头像
-dreamina text2image --prompt="现代极简客厅，大落地窗引入绿色庭院，原木色和白色配色" --ratio=1:1 --poll=30
+dreamina text2image --prompt="现代极简客厅，大落地窗引入绿色庭院，原木色和白色配色" --ratio=1:1 --poll=30 --resolution_type=2k
 
 # 竖版 — 适合手机端
-dreamina text2image --prompt="现代极简客厅，大落地窗引入绿色庭院，原木色和白色配色" --ratio=9:16 --poll=30
+dreamina text2image --prompt="现代极简客厅，大落地窗引入绿色庭院，原木色和白色配色" --ratio=9:16 --poll=30 --resolution_type=2k
 ```
 
 ### Example: 风格变体系列
@@ -66,11 +66,11 @@ dreamina text2image --prompt="现代极简客厅，大落地窗引入绿色庭�
 dreamina user_credit
 
 # 写实版
-dreamina text2image --prompt="古镇水乡黄昏，写实摄影风格，金色夕阳，水面倒影，8k" --ratio=16:9 --poll=0
+dreamina text2image --prompt="古镇水乡黄昏，写实摄影风格，金色夕阳，水面倒影，8k" --ratio=16:9 --poll=0 --resolution_type=2k
 # 水墨版
-dreamina text2image --prompt="古镇水乡黄昏，水墨画风格，黑白灰墨色，大面积留白，宣纸质感" --ratio=16:9 --poll=0
+dreamina text2image --prompt="古镇水乡黄昏，水墨画风格，黑白灰墨色，大面积留白，宣纸质感" --ratio=16:9 --poll=0 --resolution_type=2k
 # 二次元版
-dreamina text2image --prompt="古镇水乡黄昏，日式动漫风格，温暖色调，新海诚光影，赛璐珞上色" --ratio=16:9 --poll=0
+dreamina text2image --prompt="古镇水乡黄昏，日式动漫风格，温暖色调，新海诚光影，赛璐珞上色" --ratio=16:9 --poll=0 --resolution_type=2k
 ```
 
 ## Workflow Summary

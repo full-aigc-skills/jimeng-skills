@@ -9,16 +9,16 @@
 ```
 用户有多少参考素材？
 ├── 1张图片
-│   └── dreamina image2video           # 单图生视频
+│   └── dreamina image2video           --video_resolution=720p  # 单图生视频
 ├── 2张图片
 │   ├── 是首尾帧关系（从A变到B）？
-│   │   └── dreamina frames2video      # 首尾帧
+│   │   └── dreamina frames2video      --video_resolution=720p  # 首尾帧
 │   └── 是连续故事帧？
-│       └── dreamina multiframe2video  # 多帧故事
+│       └── dreamina multiframe2video  --video_resolution=720p  # 多帧故事
 ├── 3-20张图片（故事板序列）
-│   └── dreamina multiframe2video      # 多帧故事
+│   └── dreamina multiframe2video      --video_resolution=720p  # 多帧故事
 └── 图片 + 视频/音频混合
-    └── dreamina multimodal2video      # 全能参考
+    └── dreamina multimodal2video      --video_resolution=720p  # 全能参考
 ```
 
 ## 模式能力对比

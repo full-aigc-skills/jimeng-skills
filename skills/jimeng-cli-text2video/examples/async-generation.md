@@ -17,6 +17,7 @@ dreamina user_credit
 
 # Step 2: 异步提交
 dreamina text2video \
+  --video_resolution=720p \
   --prompt="镜头从高空缓缓下降穿过云层，展现雪山之巅的壮丽全景，金色夕阳照亮山峰，云雾在脚下翻滚，10秒，航拍纪录片风格" \
   --duration=10 \
   --model_version=seedance2.0 \
@@ -32,9 +33,9 @@ dreamina text2video \
 dreamina query_result --submit_id=video-xyz-789
 
 # 可能输出:
-# Status: processing  → 还在生成中
+# Status: querying    → 还在生成中
 # Status: success     → 生成完成！
-# Status: failed      → 查看错误信息
+# Status: fail      → 查看错误信息
 ```
 
 ### Example: 查询并下载
@@ -57,7 +58,7 @@ dreamina user_credit
 # 提交批次
 ids=()
 for prompt in "提示词A" "提示词B" "提示词C"; do
-  output=$(dreamina text2video --prompt="$prompt" --duration=5 --poll=0)
+  output=$(dreamina text2video --prompt="$prompt" --duration=5 --poll=0 --video_resolution=720p)
   id=$(echo "$output" | grep -oP 'submit_id: \K\S+')
   ids+=("$id")
   echo "Submitted: $id — $prompt"

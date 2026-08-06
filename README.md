@@ -20,7 +20,7 @@ English | [简体中文](./README.zh-CN.md)
 
 **jimeng-skills** is a curated collection of Agent Skills for AI coding agents, part of the [Full AIGC Skills](https://github.com/full-aigc-skills) ecosystem.
 
-This package includes **12 skills**. Each skill is a self-contained `SKILL.md` file that AI agents load on-demand.
+This package includes **13 skills**. Each skill is a self-contained `SKILL.md` file that AI agents load on-demand.
 
 ## 📦 Install
 
@@ -34,7 +34,7 @@ Or install specific skills: `npx skills add full-aigc-skills/jimeng-skills --ski
 
 | Skill | Description |
 |-------|-------------|
-| `dreamina-cli` | Umbrella skill shipped with the dreamina CLI v1.4.8+ for cross-cutting concerns: OAuth Device Flow login, session CRUD, task history, and command selection. Delegates modal-specific SOPs to the four `jimeng-cli-*` skills. |
+| `dreamina-cli` | Umbrella skill for CLI v1.4.14 cross-cutting contracts, OAuth login, session CRUD, task history, command selection, and routing to the four execution skills. |
 | `jimeng-cli-image2image` |  Provides comprehensive guidance for executing image-to-image (图生图) editing via the dreamina CLI for |
 | `jimeng-cli-image2video` |  "Provides comprehensive guidance for executing image-to-video (图生视频) generation via the dreamina CL |
 | `jimeng-cli-text2image` |  Provides comprehensive guidance for executing text-to-image generation via the dreamina CLI for 即梦  |
